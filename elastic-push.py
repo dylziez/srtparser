@@ -5,13 +5,17 @@ import requests
 import glob
 
 # Change paths where applicable
-x = glob.glob('/home/elastictest/srt/*.srt') 
+path = "/home/elastictest/srt/"
+x = glob.glob(path + '*.srt') 
+EsPath = "http://192.168.1.48:2600/subtitles/subtitle/"
+
+
 
 for i in x:
 	# This needs to change for the srt paths sonwell has as they are numbers (just get a key/val of the numbers)
 	subsName = i
 	subsName = subsName[:-4]
-	subsName = subsName.replace('/home/elastictest/srt/', '')
+	subsName = subsName.replace(path, '')
 	# // end needs to change
 	subs = SubRipFile.open(i)
 	for i, val in enumerate(subs):
@@ -31,5 +35,5 @@ for i in x:
 		d['endTime'] = hms
 		d['text'] = subs[i].text
 		headers = {'content-type': 'application/json'}
-		r = requests.post("http://192.168.1.48:2600/subtitles/subtitle/", data=json.dumps(d), headers=headers)
+		r = requests.post(EsPath, data=json.dumps(d), headers=headers)
 		print "Inserted row for "+subsName
